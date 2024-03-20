@@ -1,0 +1,47 @@
+.loginBanner {
+  width: 100%;
+  min-height: 100dvh;
+  max-height: 100%;
+  background-image: url("../../assets/loginBG_2.jpg");
+  background-size: 100% 100%;
+}
+.loginBanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.loginFormBox {
+  width: 30rem;
+  padding: 2rem;
+}
+.loginBanner h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.formWrap {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+.registerLink{
+  text-align: center;
+}
+.registerLink p{
+  color:var(--black);
+}
+.formHeading{
+  text-align: center;
+}
+@media screen and (max-width: 768px) {
+  .loginFormBox {
+    width: 100%;
+  }
+  .loginBanner {
+    text-align: center;
+  }
+  .loginBanner h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+}

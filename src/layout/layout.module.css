@@ -1,0 +1,41 @@
+.layoutWrapper {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: space-between;
+}
+.sidebarBox {
+  background-color: var(--black);
+  height: 100dvh;
+  box-shadow: var(--shadow);
+  width: 200px;
+}
+.layoutMainWrapper {
+  width: calc(100% - 200px);
+  background-color: #ffffff;
+  padding: 1rem;
+}
+
+.menuSection ul {
+  list-style: none;
+}
+.menuSection ul a {
+  text-decoration: none;
+}
+.menuSection ul li {
+  color: var(--white);
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all ease 0.5s;
+  font-size: 14px;
+}
+.menuSection ul li:hover {
+  background-color: var(--primaryColor);
+  color: var(--white);
+}
+.logoSevction {
+  padding: 0.8rem;
+}
+.logoSevction h1 {
+  color: var(--white);
+}

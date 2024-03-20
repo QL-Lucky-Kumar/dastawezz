@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Ubuntu", sans-serif;
+}
+:root {
+  --white: #fff;
+  --shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
+  --ubuntu: "Ubuntu", sans-serif;
+  --primaryColor: #000dff;
+  --primaryTextColor: #fff;
+  --black:#000;
+  --error:rgb(255, 0, 0);
+}
+.ubuntu-light {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.ubuntu-regular {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.ubuntu-medium {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.ubuntu-bold {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.activeMenu {
+  background-color: var(--primaryColor);
+  color: var(--white);
+}
