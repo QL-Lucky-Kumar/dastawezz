@@ -17,7 +17,7 @@ const MyEditor = () => {
   return (
     <>
       <Editor
-        apiKey="u1vpilqz6jznef51h5voqb5u7fqa4xi8m0ejfqq4wg4a36uu"
+        apiKey={import.meta.env.VITE_TINY_MCE_KEY}
         onInit={({ evt, editor }: any) => (editorRef.current = editor)}
         initialValue=""
         init={{
