@@ -7,18 +7,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { accessAdminTokken } from "../../redux/slices/loginSlice";
 
 const auth = getAuth(app);
 const Login = () => {
   const [emailValue, setEmailValue] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    setIsDisabled(false);
     try {
       const value: any = await signInWithEmailAndPassword(
         auth,
@@ -26,17 +26,11 @@ const Login = () => {
         password
       );
       if (value?.user && value?.user?.accessToken) {
-        setIsDisabled(true);
-        localStorage.setItem("token", JSON.stringify(value?.user?.accessToken));
-        toast.success("Logged in", {
-          // position: toast.POSITION.TOP_RIGHT,
-        });
+        dispatch(accessAdminTokken(value?.user?.accessToken))
         navigate("/admin/dashboard");
       }
     } catch (error) {
-      toast.error("error", {
-        // position: toast.POSITION.TOP_RIGHT,
-      });
+      console.log(error)
     }
   };
   return (

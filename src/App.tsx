@@ -1,12 +1,16 @@
 import { Suspense } from "react";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import PublicRoutes from "./routes/PublicRoutes";
+import { useSelector } from "react-redux";
 
 function App() {
-  const loginToken = localStorage.getItem("token");
+  const storedToken = useSelector((state: any) => {
+    return state?.loginSlice?.accessToken;
+  });
+  
   return (
     <Suspense fallback="...Loading">
-      {loginToken ? <PrivateRoutes /> : <PublicRoutes />}
+      {!!storedToken ? <PrivateRoutes /> : <PublicRoutes />}
     </Suspense>
   );
 }

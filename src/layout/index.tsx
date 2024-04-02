@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import style from "./layout.module.css";
 import { Suspense } from "react";
 
-const Layout = () => {
+const CustomLayout = () => {
   return (
     <div className={style.layoutWrapper}>
       <Sidebar />
@@ -16,4 +16,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default CustomLayout;
