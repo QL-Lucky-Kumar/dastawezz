@@ -8,7 +8,7 @@ const initialState: AuthState = {
   accessToken: null,
 };
 
-const loginSlice:any = createSlice({
+const loginSlice: any = createSlice({
   name: "loginTokken",
   initialState,
   reducers: {

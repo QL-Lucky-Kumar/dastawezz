@@ -1,12 +1,12 @@
 .inputCustom,
 .customBtnCss {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 0.8rem;
   margin-bottom: 0.25rem;
   border: none;
   background-color: var(--white);
   box-shadow: var(--shadow);
-  border-radius: 30rem;
+  border-radius: 0.5rem;
   outline: none;
   font-family: var(--ubuntu);
   font-weight: 500;
@@ -27,6 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 }
 .modalWrapper {
   min-width: 25rem;

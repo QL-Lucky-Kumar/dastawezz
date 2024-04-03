@@ -80,3 +80,11 @@
 .description {
   font-size: 0.75rem;
 }
+.modalFooter{
+  margin-top: 0.5rem;
+}
+.inputBox{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

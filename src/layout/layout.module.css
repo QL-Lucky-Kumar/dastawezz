@@ -9,6 +9,7 @@
   height: 100dvh;
   box-shadow: var(--shadow);
   width: 200px;
+  position: relative;
 }
 .layoutMainWrapper {
   width: calc(100% - 200px);
@@ -38,4 +39,28 @@
 }
 .logoSevction h1 {
   color: var(--white);
+}
+.logoutBox {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: rgb(39, 38, 38);
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.5rem;
+}
+.logoutBox img {
+  cursor: pointer;
+}
+.logoutBox .colorPicker{
+  position: absolute;
+  bottom: 2rem;
+  left: 0rem;
+}
+.btnBox{
+  display: flex;
+  gap: 1rem;
 }
