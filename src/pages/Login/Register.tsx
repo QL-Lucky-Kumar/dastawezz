@@ -1,34 +1,120 @@
 import CustomBtn from "../../components/CustomBtn";
 import CustomInput from "../../components/CustomInput";
 import style from "./login.module.css";
+import "firebase/auth";
+import { useNavigate } from "react-router";
+import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
+import { app } from "../../firebase";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone: Yup.string(),
+  password: Yup.string().required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm Password is required"),
+});
+
+const auth = getAuth(app);
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const initialValues = {
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const handleSubmit = async (values: any, { resetForm }: any) => {
+    try {
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      resetForm();
+      navigate("/login");
+    } catch (err) {
+      console.error("User creation failed:", err);
+    }
+  };
+
   return (
     <div className={style.loginBanner}>
       <div className={style.formHeading}>
         <h1 className="ubuntu-bold">Register Your Dastawezz!</h1>
       </div>
       <div className={style.loginFormBox}>
-        <form className={style.formWrap}>
-          <div>
-            <CustomInput placeholder="Name" type="Text" errorText="hello" />
-          </div>
-          <div>
-            <CustomInput placeholder="Email" type="Email" />
-          </div>
-          <div>
-            <CustomInput placeholder="Phone" type="phone" />
-          </div>
-          <div>
-            <CustomInput placeholder="Create Password" type="password" />
-          </div>
-          <div>
-            <CustomInput placeholder="Confirm Password" type="password" />
-          </div>
-          <div>
-            <CustomBtn btnName="Register" type="submit" role="button" />
-          </div>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {() => (
+            <Form className={style.formWrap} autoComplete="off">
+              <div>
+                <Field
+                  name="name"
+                  type="text"
+                  placeholder="Name"
+                  as={CustomInput}
+                />
+                <ErrorMessage name="name" component="div" className="error" />
+              </div>
+              <div>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  as={CustomInput}
+                />
+                <ErrorMessage name="email" component="div" className="error" />
+              </div>
+              <div>
+                <Field
+                  name="phone"
+                  type="phone"
+                  placeholder="Phone"
+                  as={CustomInput}
+                />
+                <ErrorMessage name="phone" component="div" className="error" />
+              </div>
+              <div>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Create Password"
+                  as={CustomInput}
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="error"
+                />
+              </div>
+              <div>
+                <Field
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  as={CustomInput}
+                />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="div"
+                  className="error"
+                />
+              </div>
+              <div>
+                <CustomBtn btnName="Register" type="submit" role="button" />
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

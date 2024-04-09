@@ -1,5 +1,4 @@
 import styles from "./documents.module.css";
-import dummyPic from "../../assets/dummyPic.svg";
 import shareIcon from "../../assets/next.png";
 import editIcon from "../../assets/edit.png";
 import deleteIcon from "../../assets/delete.png";
@@ -11,10 +10,11 @@ const DocumentCard = (props: any) => {
     title,
     description,
     handleDeleteDocuments,
+    docImage
   } = props;
   return (
     <div className={styles.mainDocumentCardBox}>
-      <img src={dummyPic} alt="doc-pic" />
+      <img src={docImage} alt="doc-pic" />
       <div className={styles.overlayMaskDocument}>
         <div className={styles.typography_1}>
           <h4 className={styles.title}>{title}</h4>

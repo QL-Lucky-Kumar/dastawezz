@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import CustomBtn from "../../components/CustomBtn";
 import CustomInput from "../../components/CustomInput";
 import style from "./login.module.css";
@@ -6,65 +8,98 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { accessAdminTokken } from "../../redux/slices/loginSlice";
+import { toast } from "react-toastify";
 
 const auth = getAuth(app);
+
 const Login = () => {
-  const [emailValue, setEmailValue] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleLogin = async (e: any) => {
-    e.preventDefault();
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const handleLogin = async (values: any, { setSubmitting }: any) => {
     try {
       const value: any = await signInWithEmailAndPassword(
         auth,
-        emailValue,
-        password
+        values.email,
+        values.password
       );
       if (value?.user && value?.user?.accessToken) {
-        dispatch(accessAdminTokken(value?.user?.accessToken))
+        dispatch(accessAdminTokken(value?.user?.accessToken));
         navigate("/admin/dashboard");
+        toast.success("Successfully Login");
       }
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setSubmitting(false);
     }
   };
+
   return (
     <div className={style.loginBanner}>
       <div className={style.formHeading}>
         <h1 className="ubuntu-bold">Welcome To Dastawezz !</h1>
       </div>
       <div className={style.loginFormBox}>
-        <form className={style.formWrap} onSubmit={handleLogin}>
-          <div>
-            <CustomInput
-              placeholder="Email"
-              type="email"
-              value={emailValue}
-              onChange={(e: any) => setEmailValue(e.target.value)}
-            />
-          </div>
-          <div>
-            <CustomInput
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e: any) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className={style.registerLink}>
-            <p>
-              Don't Have Account |<Link to="/register"> Register Now</Link>
-            </p>
-          </div>
-          <div>
-            <CustomBtn btnName="Login" type="submit" role="button" />
-          </div>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleLogin}
+        >
+          {({ isSubmitting }) => (
+            <Form className={style.formWrap}>
+              <div>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  as={CustomInput}
+                />
+                <ErrorMessage name="email" component="div" className="error" />
+              </div>
+              <div>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  as={CustomInput}
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="error"
+                />
+              </div>
+              <div className={style.registerLink}>
+                <p>
+                  Don't Have Account |<Link to="/register"> Register Now</Link>
+                </p>
+              </div>
+              <div>
+                <CustomBtn
+                  btnName="Login"
+                  type="submit"
+                  role="button"
+                  disabled={isSubmitting}
+                />
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

@@ -15,6 +15,7 @@
   width: calc(100% - 200px);
   background-color: #ffffff;
   padding: 1rem;
+  overflow-y: auto;
 }
 
 .menuSection ul {

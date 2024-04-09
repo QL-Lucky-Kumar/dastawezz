@@ -10,6 +10,7 @@ import { logoutAction } from "../redux/slices/loginSlice";
 import CustomModal from "../components/CustomModal";
 import CustomBtn from "../components/CustomBtn";
 import { getColorCode } from "../redux/slices/themeSlice";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [showColor, setShowColor] = useState<boolean>(false);
@@ -61,9 +62,10 @@ const Sidebar = () => {
       .then(() => {
         dispatch(logoutAction());
         navigate("/login");
+        toast.success("Successfully Logout");
       })
       .catch((error: any) => {
-        console.log(error);
+        toast.error(error);
       });
   };
 

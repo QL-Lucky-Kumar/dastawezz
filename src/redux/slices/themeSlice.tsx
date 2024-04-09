@@ -5,7 +5,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  colorCode: "#fff",
+  colorCode: "",
 };
 
 const themeSlice: any = createSlice({

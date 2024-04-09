@@ -5,13 +5,20 @@ interface CustomBtnValue {
   onClick?: any;
   className?: string;
   type?: any;
-  role?:string;
+  role?: string;
+  disabled?: any;
 }
 
 const CustomBtn = (props: CustomBtnValue) => {
-  const { btnName, onClick, type ,role} = props;
+  const { btnName, onClick, type, role, disabled } = props;
   return (
-    <button onClick={onClick} className={style.customBtnCss} type={type} role={role}>
+    <button
+      onClick={onClick}
+      className={style.customBtnCss}
+      type={type}
+      role={role}
+      disabled={disabled}
+    >
       {btnName}
     </button>
   );
