@@ -7,13 +7,13 @@ import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
 import { app } from "../../firebase";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import backBtn from "../../assets/back-button.png"
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  phone: Yup.string(),
   password: Yup.string().required("Password is required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
@@ -28,7 +28,6 @@ const Register = () => {
   const initialValues = {
     name: "",
     email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   };
@@ -43,8 +42,13 @@ const Register = () => {
     }
   };
 
+  const handleBackBtn =()=>{
+    navigate('/login')
+  }
+
   return (
     <div className={style.loginBanner}>
+      <img src={backBtn} alt="back-btn" width={40} className={style.backBtn} onClick={handleBackBtn}/>
       <div className={style.formHeading}>
         <h1 className="ubuntu-bold">Register Your Dastawezz!</h1>
       </div>
@@ -73,15 +77,6 @@ const Register = () => {
                   as={CustomInput}
                 />
                 <ErrorMessage name="email" component="div" className="error" />
-              </div>
-              <div>
-                <Field
-                  name="phone"
-                  type="phone"
-                  placeholder="Phone"
-                  as={CustomInput}
-                />
-                <ErrorMessage name="phone" component="div" className="error" />
               </div>
               <div>
                 <Field

@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import CustomBtn from "../../components/CustomBtn";
+import style from "./editor.module.css"
 
 const MyEditor = () => {
   const editorRef = useRef<any>(null);
@@ -16,6 +18,9 @@ const MyEditor = () => {
 
   return (
     <>
+      <div className={style.editorSaveBtn}>
+        <CustomBtn btnName="Save" onClick={handleLogClick}/>
+      </div>
       <Editor
         apiKey={import.meta.env.VITE_TINY_MCE_KEY}
         onInit={({ evt, editor }: any) => (editorRef.current = editor)}
@@ -25,7 +30,7 @@ const MyEditor = () => {
           menu: {
             edit: { title: "Edit", items: "undo, redo, selectall" },
           },
-          toolbar_location: "top", // Set toolbar location to top
+          toolbar_location: "top",
           plugins: [
             "advlist",
             "autolink",
@@ -55,7 +60,6 @@ const MyEditor = () => {
         }}
         onEditorChange={handleEditorChange}
       />
-      {/* <button onClick={handleLogClick}>Log editor content</button> */}
     </>
   );
 };

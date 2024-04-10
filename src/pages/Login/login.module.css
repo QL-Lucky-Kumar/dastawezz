@@ -24,13 +24,13 @@
   gap: 1rem;
   flex-direction: column;
 }
-.registerLink{
+.registerLink {
   text-align: center;
 }
-.registerLink p{
-  color:var(--black);
+.registerLink p {
+  color: var(--black);
 }
-.formHeading{
+.formHeading {
   text-align: center;
 }
 @media screen and (max-width: 768px) {
@@ -44,4 +44,11 @@
     font-size: 3rem;
     margin-bottom: 2rem;
   }
+}
+.backBtn {
+  position: absolute;
+  z-index: 1000;
+  left: 2rem;
+  top: 2rem;
+  cursor: pointer;
 }

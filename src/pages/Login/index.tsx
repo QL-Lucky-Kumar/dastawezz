@@ -86,7 +86,7 @@ const Login = () => {
               </div>
               <div className={style.registerLink}>
                 <p>
-                  Don't Have Account |<Link to="/register"> Register Now</Link>
+                  Don't Have Account | <Link to="/register"> Register Now</Link>
                 </p>
               </div>
               <div>

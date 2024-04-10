@@ -11,6 +11,7 @@ import CustomModal from "../components/CustomModal";
 import CustomBtn from "../components/CustomBtn";
 import { getColorCode } from "../redux/slices/themeSlice";
 import { toast } from "react-toastify";
+import logoutIcon from "../assets/power.png"
 
 const Sidebar = () => {
   const [showColor, setShowColor] = useState<boolean>(false);
@@ -120,6 +121,7 @@ const Sidebar = () => {
           closeModal={closeModal}
           setCloseModal={setCloseModal}
           title="Are you sure ! You want to logout."
+          iconImg={logoutIcon}
         >
           <div className={style.btnBox}>
             <CustomBtn btnName="Yes" onClick={handleLogout} />

@@ -9,18 +9,21 @@ import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection } from "@firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import uploadIcon from "../../assets/upload.png"
 
 const UploadDocuments = () => {
   const [closeModal, setCloseModal] = useState<boolean>(false);
   const [docFile, setDocFile] = useState<any>();
   const [docTitle, setDocTitle] = useState<any>("");
   const [percent, setPercent] = useState(0);
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setCloseModal(!closeModal);
     setDocTitle("");
     setDocFile("");
+    setErrorMsg(false)
   };
 
   const handleUploadFile = async (e: any) => {
@@ -43,15 +46,18 @@ const UploadDocuments = () => {
     }
   };
 
-  console.log(percent, "percent hello");
   const handleSubmitForm = async (e: any) => {
     try {
       e.preventDefault();
+      if (!docTitle || !docFile) {
+        setErrorMsg(true);
+        return;
+      }
       let docInst = collection(db, "document");
       await addDoc(docInst, { docTitle, docFile });
       setCloseModal(false);
       navigate("/documents-list");
-      toast.success("Add Successfully");
+      toast.success("Added Successfully");
     } catch (error) {
       console.log(error);
     }
@@ -75,24 +81,35 @@ const UploadDocuments = () => {
           closeModal={closeModal}
           setCloseModal={setCloseModal}
           title="Upload Documents"
+          iconImg={uploadIcon}
         >
           <form onSubmit={handleSubmitForm} autoComplete="off">
             <div className={style.inputBox}>
-              <CustomInput
-                placeholder="Title"
-                type="text"
-                id="title"
-                name="title"
-                value={docTitle}
-                onChange={(e: any) => setDocTitle(e?.target?.value)}
-              />
-              <CustomInput
-                placeholder="Upload File"
-                type="file"
-                id="document"
-                name="document"
-                onChange={(e: any) => handleUploadFile(e)}
-              />
+              <div>
+                <CustomInput
+                  placeholder="Title"
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={docTitle}
+                  onChange={(e: any) => setDocTitle(e?.target?.value)}
+                  errorText={
+                    docTitle == "" && errorMsg ? "Title is Required" : null
+                  }
+                />
+              </div>
+              <div>
+                <CustomInput
+                  placeholder="Upload File"
+                  type="file"
+                  id="document"
+                  name="document"
+                  onChange={(e: any) => handleUploadFile(e)}
+                  errorText={
+                    docFile == "" && errorMsg ? "Document is Required" : null
+                  }
+                />
+              </div>
             </div>
             {percent > 1 ? (
               <progress
