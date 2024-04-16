@@ -13,13 +13,12 @@
   width: 20rem;
 }
 .mainDocumentCardBox {
-  width: 12rem;
-  height: 15rem;
+  width: 10rem;
+  height: 12rem;
   box-shadow: var(--shadow);
   border-radius: 0.5rem;
   border: 1px solid #f2f2f2;
   padding: 0.5rem;
-  /* background-color: rgb(236, 221, 243); */
   background-color: antiquewhite;
   position: relative;
   overflow: hidden;
@@ -33,8 +32,9 @@
 }
 .documentsCardListing {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+  margin-bottom: 2rem;
 }
 .overlayMaskDocument {
   position: absolute;
@@ -43,7 +43,7 @@
   background-color: var(--primaryColor);
   z-index: 100;
   bottom: 0;
-  height: 7rem;
+  height: auto;
   border-radius: 0rem 0rem 0.5rem 0.5rem;
   transition: all ease 0.5s;
   transform: translateY(100%);
@@ -56,7 +56,6 @@
   display: flex;
   justify-content: end;
   gap: 0.5rem;
-  position: absolute;
   bottom: 0.5rem;
   left: 0;
   width: 100%;
@@ -79,4 +78,55 @@
 }
 .description {
   font-size: 0.75rem;
+}
+.modalFooter {
+  margin-top: 0.5rem;
+}
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.addNewDoc {
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background-color: var(--primaryColor);
+  color: var(--white);
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  font-weight: bold;
+  min-height: 12rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.progressBar::-webkit-progress-bar {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.progressBar::-webkit-progress-value {
+  background-color: var(--primaryColor);
+  border-radius: 5px;
+}
+
+.deleteBtnBox {
+  display: flex;
+  gap: 1rem;
+}
+
+.otherDocList {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.otherDocumentsList h3 {
+  margin-bottom: 1rem;
 }

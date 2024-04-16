@@ -28,7 +28,7 @@ const PrivateRoutes = () => {
         },
         {
           path: "*",
-          element: <Navigate to="/upload-documents" />,
+          element: <Navigate to="/" />,
         },
       ],
     },

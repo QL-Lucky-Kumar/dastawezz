@@ -4,10 +4,22 @@ import Register from "../pages/Login/Register";
 
 const PublicRoutes = () => {
   const AllPublicRoutes = useRoutes([
-    { path: "/Login", element: <Login /> },
-    { path: "/register", element: <Register /> },
-    { path: "/", element: <Navigate replace to="/Login" /> },
-    { path: "*", element: <Navigate to="/Login" /> },
+    {
+      path: "/Login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/",
+      element: <Navigate replace to="/Login" />,
+    },
+    {
+      path: "*",
+      element: <Navigate to="/" />,
+    },
   ]);
   return AllPublicRoutes;
 };

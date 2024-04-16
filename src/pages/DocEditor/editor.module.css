@@ -1,4 +1,8 @@
-.editorSaveBtn{
-    width: 8rem;
-    margin-bottom: 1rem;
+.editorSaveBtn {
+  width: 7rem;
+  margin-bottom: 1rem;
+  padding: 0.1rem;
+}
+.quill {
+  height: 78vh !important;
 }

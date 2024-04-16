@@ -4,11 +4,12 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: `${import.meta.env.VITE_FIREBASE_API_KEY}`,
-  authDomain: "gyanganga-b97fd.firebaseapp.com",
-  projectId: "gyanganga-b97fd",
-  storageBucket: "gyanganga-b97fd.appspot.com",
-  messagingSenderId: "554825264448",
-  appId: "1:554825264448:web:060070757df612f80d5ea5",
+  authDomain: "dastawezz-757ce.firebaseapp.com",
+  projectId: "dastawezz-757ce",
+  storageBucket: "dastawezz-757ce.appspot.com",
+  messagingSenderId: "231378213467",
+  appId: "1:231378213467:web:f638850f115033611f3d7e",
+  measurementId: "G-QFFZ3M9E32",
 };
 
 export const app = initializeApp(firebaseConfig);

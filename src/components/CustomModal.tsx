@@ -1,10 +1,8 @@
 import style from "./commonComponents.module.css";
 import closeIcon from "../assets/close.png";
-import CustomInput from "./CustomInput";
-import CustomBtn from "./CustomBtn";
 
 const CustomModal = (props: any) => {
-  const { setCloseModal } = props;
+  const { setCloseModal, children, title, iconImg } = props;
   const handleCloseModal = () => {
     setCloseModal(false);
   };
@@ -14,19 +12,12 @@ const CustomModal = (props: any) => {
         <div className={style.modalWrapper}>
           <img src={closeIcon} alt="close-icon" onClick={handleCloseModal} />
           <div className={style.modalHeader}>
-            <h2>Upload Documents</h2>
-          </div>
-          <div className={style.modalBody}>
-            <div>
-              <CustomInput placeholder="Title" type="text" />
+            <div className={style.iconBox}>
+              <img src={iconImg} alt="icon" width={24}/>
             </div>
-            <div>
-              <CustomInput placeholder="Upload File" type="file" />
-            </div>
+            <h2>{title}</h2>
           </div>
-          <div className={style.modalFooter}>
-            <CustomBtn btnName="Submit" />
-          </div>
+          <div className={style.modalBody}>{children}</div>
         </div>
       </div>
     </>
