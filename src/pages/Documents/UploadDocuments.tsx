@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection } from "@firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
-import uploadIcon from "../../assets/upload.png"
+import uploadIcon from "../../assets/upload.png";
 
 const UploadDocuments = () => {
   const [closeModal, setCloseModal] = useState<boolean>(false);
@@ -23,7 +23,7 @@ const UploadDocuments = () => {
     setCloseModal(!closeModal);
     setDocTitle("");
     setDocFile("");
-    setErrorMsg(false)
+    setErrorMsg(false);
   };
 
   const handleUploadFile = async (e: any) => {
@@ -37,7 +37,11 @@ const UploadDocuments = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
         setPercent(progressVal);
+        if (progressVal == 100) {
+          setPercent(0);
+        }
       });
+
       await uploadTask;
       const downloadURL = await getDownloadURL(fileRef);
       setDocFile(downloadURL);

@@ -8,7 +8,6 @@ const DocumentCard = (props: any) => {
     handleEditDocuments,
     handleShareDocuments,
     title,
-    description,
     handleDeleteDocuments,
     docImage
   } = props;
@@ -18,7 +17,6 @@ const DocumentCard = (props: any) => {
       <div className={styles.overlayMaskDocument}>
         <div className={styles.typography_1}>
           <h4 className={styles.title}>{title}</h4>
-          <p className={styles.description}>{description}</p>
         </div>
         <div className={styles.iconBox}>
           <img

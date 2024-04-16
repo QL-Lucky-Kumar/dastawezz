@@ -12,8 +12,8 @@ body {
   --ubuntu: "Ubuntu", sans-serif;
   --primaryColor: #8103ff;
   --primaryTextColor: #fff;
-  --black:#000;
-  --error:rgb(255, 0, 0);
+  --black: #000;
+  --error: rgb(255, 0, 0);
 }
 .ubuntu-light {
   font-family: "Ubuntu", sans-serif;
@@ -42,8 +42,12 @@ body {
   background-color: var(--primaryColor);
   color: var(--white);
 }
-.error{
-  text-align: left!important;
+.error {
+  text-align: left !important;
   font-size: 12px;
   color: var(--error);
+}
+.disabledBtn{
+  background-color: #696969 !important;
+  cursor: default;
 }

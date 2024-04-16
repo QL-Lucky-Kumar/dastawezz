@@ -1,4 +1,4 @@
-import style from "./commonComponents.module.css";
+import styles from "./commonComponents.module.css";
 
 interface CustomBtnValue {
   btnName?: string;
@@ -7,17 +7,19 @@ interface CustomBtnValue {
   type?: any;
   role?: string;
   disabled?: any;
+  style?: any;
 }
 
 const CustomBtn = (props: CustomBtnValue) => {
-  const { btnName, onClick, type, role, disabled } = props;
+  const { btnName, onClick, type, role, disabled, style } = props;
   return (
     <button
       onClick={onClick}
-      className={style.customBtnCss}
+      className={styles.customBtnCss}
       type={type}
       role={role}
       disabled={disabled}
+      style={style}
     >
       {btnName}
     </button>

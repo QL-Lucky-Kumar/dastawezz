@@ -7,7 +7,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["loginSlice","themeSlice"],
+  whitelist: ["loginSlice", "themeSlice", "docValueSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
