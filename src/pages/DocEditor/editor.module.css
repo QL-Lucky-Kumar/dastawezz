@@ -1,7 +1,9 @@
 .editorSaveBtn {
-  width: 7rem;
+  width: 12rem;
   margin-bottom: 1rem;
   padding: 0.1rem;
+  display: flex;
+  gap: 0.5rem;
 }
 .quill {
   height: 78vh !important;

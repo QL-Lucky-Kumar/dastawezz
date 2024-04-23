@@ -13,7 +13,7 @@ const DocumentCard = (props: any) => {
   } = props;
   return (
     <div className={styles.mainDocumentCardBox}>
-      <img src={docImage} alt="doc-pic" />
+      <img src={docImage} alt="doc-pic" width={100} className={styles.docImage}/>
       <div className={styles.overlayMaskDocument}>
         <div className={styles.typography_1}>
           <h4 className={styles.title}>{title}</h4>

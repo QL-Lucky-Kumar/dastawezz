@@ -77,7 +77,7 @@ const UploadDocuments = () => {
           </p>
         </div>
         <div className={style.uploadBtnBox}>
-          <CustomBtn btnName="Upload" onClick={handleOpenModal} />
+          <CustomBtn btnName="Upload" onClick={handleOpenModal} style={{width:"100%"}}/>
         </div>
       </div>
       {closeModal ? (
@@ -125,7 +125,7 @@ const UploadDocuments = () => {
             ) : null}
 
             <div className={style.modalFooter}>
-              <CustomBtn btnName="Submit" />
+              <CustomBtn btnName="Submit" style={{width:"100%"}}/>
             </div>
           </form>
         </CustomModal>
