@@ -4,7 +4,7 @@ import style from "./editor.module.css";
 import "react-quill/dist/quill.snow.css";
 
 const MyEditor = (props: any) => {
-  const { docFile, onClick, onChange, value } = props;
+  const { docFile, onClick, onChange, value, handleBackBtn } = props;
 
   const toolbarOptions = [
     ["link", "image"],
@@ -27,6 +27,7 @@ const MyEditor = (props: any) => {
   return (
     <>
       <div className={style.editorSaveBtn}>
+        <CustomBtn btnName="Back" onClick={handleBackBtn} />
         <CustomBtn
           btnName="Save"
           onClick={onClick}

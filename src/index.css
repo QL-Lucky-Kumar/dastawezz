@@ -6,6 +6,7 @@
 body {
   font-family: "Ubuntu", sans-serif;
 }
+
 :root {
   --white: #fff;
   --shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
@@ -14,6 +15,7 @@ body {
   --primaryTextColor: #fff;
   --black: #000;
   --error: rgb(255, 0, 0);
+  --gray:rgb(250, 250, 250);
 }
 .ubuntu-light {
   font-family: "Ubuntu", sans-serif;
