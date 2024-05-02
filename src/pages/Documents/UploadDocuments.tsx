@@ -29,22 +29,24 @@ const UploadDocuments = () => {
   const handleUploadFile = async (e: any) => {
     try {
       const file = e?.target?.files?.[0];
-      if (!file) return;
-      const fileRef = ref(fileDB, `allDocuments/${file.name + uuidv4()}`);
-      const uploadTask = uploadBytesResumable(fileRef, file);
-      uploadTask.on("state_changed", (snapshot: any) => {
-        const progressVal = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setPercent(progressVal);
-        if (progressVal == 100) {
-          setPercent(0);
-        }
-      });
-
-      await uploadTask;
-      const downloadURL = await getDownloadURL(fileRef);
-      setDocFile(downloadURL);
+      const newFile = file.name.split(".");
+      if (!newFile[1]) return;
+      if (newFile[1] === "docx" || newFile[1] === "txt") {
+        const fileRef = ref(fileDB, `allDocuments/${file.name + uuidv4()}`);
+        const uploadTask = uploadBytesResumable(fileRef, file);
+        uploadTask.on("state_changed", (snapshot: any) => {
+          const progressVal = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setPercent(progressVal);
+          if (progressVal == 100) {
+            setPercent(0);
+          }
+        });
+        await uploadTask;
+        const downloadURL = await getDownloadURL(fileRef);
+        setDocFile(downloadURL);
+      }
     } catch (error) {
       console.error("Error occurred during file upload:", error);
     }
@@ -69,17 +71,21 @@ const UploadDocuments = () => {
 
   return (
     <>
-      <div className={style.uploadBox}>
+      {/* <div className={style.uploadBox}>
         <div className={style.uploadtypography_1}>
           <h1>Publish to the Dastawezz</h1>
           <p style={{ color: "#000" }}>
             Presentations, research papers, legal documents, and more
           </p>
         </div>
-        <div className={style.uploadBtnBox}>
-          <CustomBtn btnName="Upload" onClick={handleOpenModal} style={{width:"100%"}}/>
-        </div>
-      </div>
+        <div className={style.uploadBtnBox}> */}
+          <CustomBtn
+            btnName="Upload"
+            onClick={handleOpenModal}
+            style={{ width: "100%" }}
+          />
+        {/* </div>
+      </div> */}
       {closeModal ? (
         <CustomModal
           closeModal={closeModal}
@@ -110,7 +116,7 @@ const UploadDocuments = () => {
                   name="document"
                   onChange={(e: any) => handleUploadFile(e)}
                   errorText={
-                    docFile == "" && errorMsg ? "Document is Required" : null
+                    docFile == "" && errorMsg ? "Only Accept txt or docx files" : null
                   }
                 />
               </div>
@@ -125,7 +131,7 @@ const UploadDocuments = () => {
             ) : null}
 
             <div className={style.modalFooter}>
-              <CustomBtn btnName="Submit" style={{width:"100%"}}/>
+              <CustomBtn btnName="Submit" style={{ width: "100%" }} />
             </div>
           </form>
         </CustomModal>

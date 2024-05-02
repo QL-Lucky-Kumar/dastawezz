@@ -1,10 +1,219 @@
 .editorSaveBtn {
-  width: 12rem;
-  margin-bottom: 1rem;
-  padding: 0.1rem;
   display: flex;
   gap: 0.5rem;
+  align-items: center;
+}
+.editorSaveBtn img{
+  cursor: pointer;
 }
 .quill {
-  height: 78vh !important;
+  height: 100vh;
+}
+.fullBoxWrapper {
+  width: 100%;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.titledDocument::placeholder {
+  color: var(--black);
+  font-family: var(--font);
+  font-weight: 500;
+  opacity: 0.8;
+}
+.titledDocument{
+  border: 1px solid transparent;
+  padding: 0.2rem 0.5rem;
+  color: var(--black);
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: capitalize;
+  width:9rem;
+}
+.titledDocument:focus-visible{
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 0.25rem;
+}
+.openFile{
+  font-size: 0.825rem;
+  font-family: var(--font);
+  font-weight: 500;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+
+.wrapperAllBox{
+  padding: 1rem;
+}
+.uploadBox {
+  border: 3px dotted var(--primaryColor);
+  height: 100%;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 2rem;
+}
+.uploadBtnBox {
+  width: 20rem;
+}
+.mainDocumentCardBox {
+  width: 8.5rem;
+  height: 10rem;
+  box-shadow: var(--shadow);
+  border-radius: 0.5rem;
+  border: 1px solid #f2f2f2;
+  background-color: var(--white);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+.mainDocumentCardBox .docImage{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.documentsCardListing {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.overlayMaskDocument {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  background-color: var(--primaryColor);
+  z-index: 100;
+  bottom: 0;
+  height: auto;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  transition: all ease 0.5s;
+  transform: translateY(100%);
+  padding: 0.5rem;
+}
+.mainDocumentCardBox:hover .overlayMaskDocument {
+  transform: translateY(0%);
+}
+.iconBox {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+  bottom: 0.5rem;
+  left: 0;
+  width: 100%;
+  padding-right: 0.5rem;
+}
+.iconBox img {
+  width: 1rem;
+  height: 1rem;
+}
+.typography_1 {
+  max-height: 4.5rem;
+  overflow: hidden;
+}
+.title,
+.description {
+  font-size: 0.875rem;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+  text-transform: capitalize;
+}
+.description {
+  font-size: 0.75rem;
+}
+.modalFooter {
+  margin-top: 0.5rem;
+}
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.addNewDoc {
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background-color: var(--primaryColor);
+  color: var(--white);
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  font-weight: bold;
+  height: 10rem;
+  width: 8.5rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.progressBar::-webkit-progress-bar {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.progressBar::-webkit-progress-value {
+  background-color: var(--primaryColor);
+  border-radius: 5px;
+}
+
+.deleteBtnBox {
+  display: flex;
+  gap: 1rem;
+}
+.mainDocumentListingBox{
+  display: flex;
+  flex-direction: column;
+}
+
+.otherDocList {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.shareBox {
+  margin-bottom: 1.5rem;
+  height: auto;
+  overflow: auto;
+  max-height: 6rem;
+}
+.shareBox::-webkit-scrollbar{
+  width:1px;
+  /* background-color: var(--primaryColor); */
+}
+.userList {
+  display: flex;
+  align-items:start;
+  padding: 0.5rem;
+}
+.userList input[type="checkbox"] {
+  width: auto;
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: var(--primaryColor);
+  border: 1px solid var(--primaryColor);
+}
+.otherTextBtnBox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }

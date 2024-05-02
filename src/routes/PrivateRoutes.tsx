@@ -1,7 +1,6 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import Documents from "../pages/Documents";
 import Layout from "../layout";
-import UploadDocuments from "../pages/Documents/UploadDocuments";
 import Editor from "../pages/DocEditor";
 
 const PrivateRoutes = () => {
@@ -11,16 +10,12 @@ const PrivateRoutes = () => {
       element: <Layout />,
       children: [
         {
-          path: "upload-documents",
-          element: <UploadDocuments />,
+          path: "documents-list",
+          element: <Documents />,
         },
         {
           path: "/",
-          element: <Navigate replace to="upload-documents" />,
-        },
-        {
-          path: "documents-list",
-          element: <Documents />,
+          element: <Navigate replace to="documents-list" />,
         },
         {
           path: "edit-docs",

@@ -1,12 +1,18 @@
+import { useState } from "react";
 import ReactQuill from "react-quill";
-import CustomBtn from "../../components/CustomBtn";
 import style from "./editor.module.css";
 import "react-quill/dist/quill.snow.css";
+import backBtn from "../../assets/back-button.png";
+import mammoth from "mammoth";
 
-const MyEditor = (props: any) => {
-  const { docFile, onClick, onChange, value, handleBackBtn } = props;
+const MyEditor = (props:any) => {
+  const { onChange, handleBackBtn } = props;
+  const [htmlContent, setHtmlContent] = useState("");
 
   const toolbarOptions = [
+    [{ font: [] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ size: ["small", true, "large", "huge"] }],
     ["link", "image"],
     ["bold", "italic", "underline", "strike"],
     ["blockquote", "code-block"],
@@ -14,42 +20,60 @@ const MyEditor = (props: any) => {
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }],
     [{ direction: "rtl" }],
-    [{ size: ["small", true, "large", "huge"] }],
     [{ color: [] }, { background: [] }],
-    [{ font: [] }],
     [{ align: [] }],
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
   ];
-  const module = {
+  const modules = {
     toolbar: toolbarOptions,
+  };
+
+  const handleFileChange = (event:any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e:any) => {
+      const arrayBuffer = e.target.result;
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      setHtmlContent(result.value);
+      onChange(result.value);
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleHtmlChange = (content:any) => {
+    setHtmlContent(content);
+    onChange(content);
   };
 
   return (
     <>
-      <div className={style.editorSaveBtn}>
-        <CustomBtn btnName="Back" onClick={handleBackBtn} />
-        <CustomBtn
-          btnName="Save"
-          onClick={onClick}
-          disabled={docFile?.length < 1 ? true : false}
-          style={
-            docFile.length < 1
-              ? {
-                  backgroundColor: "grey",
-                  border: "1px solid transparent",
-                  cursor: "default",
-                }
-              : null
-          }
-        />
+      <div className={style.fullBoxWrapper}>
+        <div className={style.editorSaveBtn}>
+          <img
+            src={backBtn}
+            alt="back-btn"
+            onClick={handleBackBtn}
+            width={20}
+            height={20}
+          />
+          <input
+            placeholder="Untitled Document"
+            className={style.titledDocument}
+          />
+          <input
+            type="file"
+            onChange={handleFileChange}
+            placeholder="File"
+            className={style.openFile}
+          />
+        </div>
       </div>
       <ReactQuill
-        modules={module}
+        modules={modules}
         theme="snow"
-        value={value}
-        onChange={onChange}
+        value={htmlContent}
+        onChange={handleHtmlChange}
         className={style.quill}
-        placeholder="Type Here..."
       />
     </>
   );
