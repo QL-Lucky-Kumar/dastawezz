@@ -24,6 +24,7 @@ const Documents = () => {
   const [showEditorId, setShowEditorId] = useState<string>("");
   const [showNewDocEditor, setShowNewDocEditor] = useState<boolean>(false);
   const [shareDocs, setShareDocs] = useState<boolean>(false);
+  const [docTitle, seDocTitle] = useState<string>("");
 
   const handleClickShareDocs = () => {
     setShareDocs(true);
@@ -77,29 +78,40 @@ const Documents = () => {
   };
 
   const handleAddUpdateContent = async () => {
+    setShowNewDocEditor(false);
     if (showEditorId) {
       try {
         const docRef = doc(db, "localDocs", showEditorId);
         await updateDoc(docRef, {
-          docFile: docFile,
+          docFile,
+          docTitle,
         });
         navigate("/documents-list");
         setShowEditorId("");
         getLocalDocData();
+        setDocfile("");
         setShowNewDocEditor(false);
+        toast.success("Update Successfully");
       } catch (error) {
         console.log(error);
       }
     } else {
-      try {
-        let docInst = collection(db, "localDocs");
-        await addDoc(docInst, { docFile });
-        setShowNewDocEditor(false);
-        getLocalDocData();
-      } catch (error) {
-        console.log(error);
+      if (docFile !== "") {
+        try {
+          let docInst = collection(db, "localDocs");
+          await addDoc(docInst, { docFile, docTitle });
+          setShowNewDocEditor(false);
+          getLocalDocData();
+          toast.success("Add Successfully");
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
+  };
+
+  const handlePickTitle = (e: any) => {
+    seDocTitle(e.target.value);
   };
 
   useEffect(() => {
@@ -111,9 +123,11 @@ const Documents = () => {
       {showNewDocEditor || showEditorId ? (
         <MyEditor
           docFile={docFile}
+          docTitle={docTitle}
           value={docFile}
           onChange={setDocfile}
           handleBackBtn={handleAddUpdateContent}
+          pickTitle={handlePickTitle}
         />
       ) : (
         <div className={style.wrapperAllBox}>
@@ -123,7 +137,6 @@ const Documents = () => {
                 Created By Our Platform
               </h3>
             </div>
-
             <div className={style.documentsCardListing}>
               <button className={style.addNewDoc} onClick={handleOpenDocEditor}>
                 <img src={plus} alt="plus-icon" width={24} />
@@ -133,10 +146,12 @@ const Documents = () => {
                 Document
               </button>
               {localDocList?.map((item: any) => {
+                console.log(item,"hellolololo")
                 return (
                   <DocumentCard
                     docImage={dummyPic}
                     key={item.id}
+                    title={item.docTitle}
                     handleEditDocuments={() => handleClickEdit(item)}
                     handleShareDocuments={handleClickShareDocs}
                     handleDeleteDocuments={() => handleDeleteEditorDoc(item.id)}
@@ -195,7 +210,6 @@ const Documents = () => {
               </div>
             </CustomModal>
           ) : null}
-
         </div>
       )}
     </>

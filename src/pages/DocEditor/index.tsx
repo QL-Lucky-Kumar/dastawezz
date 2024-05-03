@@ -5,8 +5,8 @@ import "react-quill/dist/quill.snow.css";
 import backBtn from "../../assets/back-button.png";
 import mammoth from "mammoth";
 
-const MyEditor = (props:any) => {
-  const { onChange, handleBackBtn } = props;
+const MyEditor = (props: any) => {
+  const { onChange, handleBackBtn, value, pickTitle, docTitle } = props;
   const [htmlContent, setHtmlContent] = useState("");
 
   const toolbarOptions = [
@@ -27,11 +27,11 @@ const MyEditor = (props:any) => {
     toolbar: toolbarOptions,
   };
 
-  const handleFileChange = (event:any) => {
+  const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = async (e:any) => {
+    reader.onload = async (e: any) => {
       const arrayBuffer = e.target.result;
       const result = await mammoth.convertToHtml({ arrayBuffer });
       setHtmlContent(result.value);
@@ -40,7 +40,7 @@ const MyEditor = (props:any) => {
     reader.readAsArrayBuffer(file);
   };
 
-  const handleHtmlChange = (content:any) => {
+  const handleHtmlChange = (content: any) => {
     setHtmlContent(content);
     onChange(content);
   };
@@ -59,6 +59,8 @@ const MyEditor = (props:any) => {
           <input
             placeholder="Untitled Document"
             className={style.titledDocument}
+            value={docTitle}
+            onChange={pickTitle}
           />
           <input
             type="file"
@@ -71,7 +73,7 @@ const MyEditor = (props:any) => {
       <ReactQuill
         modules={modules}
         theme="snow"
-        value={htmlContent}
+        value={htmlContent || value}
         onChange={handleHtmlChange}
         className={style.quill}
       />
