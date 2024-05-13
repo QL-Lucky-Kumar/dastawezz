@@ -8,23 +8,21 @@ import { useEffect, useState } from "react";
 import dummyPic from "../../assets/dummyPic.png";
 import CustomModal from "../../components/CustomModal";
 import CustomBtn from "../../components/CustomBtn";
-import { deleteDoc, doc, updateDoc, addDoc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import deleteIcon from "../../assets/delete_.png";
-import MyEditor from "../DocEditor";
 import shareIcon from "../../assets/share.png";
 import CustomInput from "../../components/CustomInput";
+import { useDispatch } from "react-redux";
+import { getDocumentValue } from "../../redux/slices/docValueSlice";
 
 const Documents = () => {
-  const navigate = useNavigate();
   const [localDocList, setLocalDocList] = useState<any>();
   const [editorDocId, setEditorDocId] = useState<string>("");
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [docFile, setDocfile] = useState<string>("");
-  const [showEditorId, setShowEditorId] = useState<string>("");
-  const [showNewDocEditor, setShowNewDocEditor] = useState<boolean>(false);
   const [shareDocs, setShareDocs] = useState<boolean>(false);
-  const [docTitle, seDocTitle] = useState<string>("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickShareDocs = () => {
     setShareDocs(true);
@@ -34,13 +32,13 @@ const Documents = () => {
     const matchId = localDocList.find((data: any) => {
       return data.id === item.id;
     });
-    setShowEditorId(item.id);
-    setDocfile(matchId.docFile);
+    dispatch(getDocumentValue(matchId));
+    navigate("/edit-docs");
   };
 
   const handleOpenDocEditor = () => {
-    setShowNewDocEditor(true);
-    setShowEditorId("");
+    navigate("/edit-docs");
+    dispatch(getDocumentValue(""));
   };
 
   const handleCancelDelete = () => {
@@ -77,141 +75,96 @@ const Documents = () => {
     }
   };
 
-  const handleAddUpdateContent = async () => {
-    setShowNewDocEditor(false);
-    if (showEditorId) {
-      try {
-        const docRef = doc(db, "localDocs", showEditorId);
-        await updateDoc(docRef, {
-          docFile,
-          docTitle,
-        });
-        navigate("/documents-list");
-        setShowEditorId("");
-        getLocalDocData();
-        setDocfile("");
-        setShowNewDocEditor(false);
-        toast.success("Update Successfully");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      if (docFile !== "") {
-        try {
-          let docInst = collection(db, "localDocs");
-          await addDoc(docInst, { docFile, docTitle });
-          setShowNewDocEditor(false);
-          getLocalDocData();
-          toast.success("Add Successfully");
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-  };
-
-  const handlePickTitle = (e: any) => {
-    seDocTitle(e.target.value);
-  };
-
   useEffect(() => {
     getLocalDocData();
   }, []);
 
   return (
     <>
-      {showNewDocEditor || showEditorId ? (
-        <MyEditor
-          docFile={docFile}
-          docTitle={docTitle}
-          value={docFile}
-          onChange={setDocfile}
-          handleBackBtn={handleAddUpdateContent}
-          pickTitle={handlePickTitle}
-        />
-      ) : (
-        <div className={style.wrapperAllBox}>
-          <div className={style.mainDocumentListingBox}>
-            <div className={style.otherTextBtnBox}>
-              <h3 style={{ marginBottom: "0.5rem" }}>
-                Created By Our Platform
-              </h3>
-            </div>
-            <div className={style.documentsCardListing}>
-              <button className={style.addNewDoc} onClick={handleOpenDocEditor}>
-                <img src={plus} alt="plus-icon" width={24} />
-                <br />
-                Add New
-                <br />
-                Document
-              </button>
-              {localDocList?.map((item: any) => {
-                console.log(item,"hellolololo")
-                return (
-                  <DocumentCard
-                    docImage={dummyPic}
-                    key={item.id}
-                    title={item.docTitle}
-                    handleEditDocuments={() => handleClickEdit(item)}
-                    handleShareDocuments={handleClickShareDocs}
-                    handleDeleteDocuments={() => handleDeleteEditorDoc(item.id)}
-                  />
-                );
-              })}
-            </div>
+      <div className={style.wrapperAllBox}>
+        <div className={style.mainDocumentListingBox}>
+          <div className={style.otherTextBtnBox}>
+            <h3 style={{ marginBottom: "0.5rem" }}>Create Your Document</h3>
           </div>
-
-          {showEditModal ? (
-            <CustomModal
-              closeModal={showEditModal}
-              setCloseModal={setShowEditModal}
-              title="Are you sure ! You want to delete this item."
-              iconImg={deleteIcon}
-            >
-              <div className={style.deleteBtnBox}>
-                <CustomBtn
-                  btnName="Yes"
-                  onClick={handleClickDeleteEditorDoc}
-                  style={{ width: "100%" }}
+          <div className={style.documentsCardListing}>
+            <button className={style.addNewDoc} onClick={handleOpenDocEditor}>
+              <img src={plus} alt="plus-icon" width={24} />
+              <br />
+              Add New
+              <br />
+              Document
+            </button>
+            {localDocList?.map((item: any) => {
+              return (
+                <DocumentCard
+                  docImage={dummyPic}
+                  key={item.id}
+                  title={
+                    item.docTitle
+                      ? item.docTitle?.length > 15
+                        ? item.docTitle?.slice(0, 15) + "..."
+                        : item.docTitle
+                      : "Untitled Document"
+                  }
+                  handleEditDocuments={() => handleClickEdit(item)}
+                  handleShareDocuments={handleClickShareDocs}
+                  handleDeleteDocuments={() => handleDeleteEditorDoc(item.id)}
                 />
-                <CustomBtn
-                  btnName="Cancel"
-                  onClick={handleCancelDelete}
-                  style={{ width: "100%" }}
-                />
-              </div>
-            </CustomModal>
-          ) : null}
-
-          {shareDocs ? (
-            <CustomModal
-              closeModal={shareDocs}
-              setCloseModal={setShareDocs}
-              title="Share your documents"
-              iconImg={shareIcon}
-            >
-              <div className={style.shareBox}>
-                <div className={style.userList}>
-                  <CustomInput type="checkbox" />
-                  <span>hello world</span>
-                </div>
-              </div>
-              <div className={style.deleteBtnBox}>
-                <CustomBtn
-                  btnName="Share"
-                  onClick={handleClickDeleteEditorDoc}
-                  style={{ width: "100%" }}
-                />
-                <CustomBtn
-                  btnName="Cancel"
-                  onClick={handleCancelDelete}
-                  style={{ width: "100%" }}
-                />
-              </div>
-            </CustomModal>
-          ) : null}
+              );
+            })}
+          </div>
         </div>
-      )}
+
+        {showEditModal ? (
+          <CustomModal
+            closeModal={showEditModal}
+            setCloseModal={setShowEditModal}
+            title="Are you sure ! You want to delete this item."
+            iconImg={deleteIcon}
+          >
+            <div className={style.deleteBtnBox}>
+              <CustomBtn
+                btnName="Yes"
+                onClick={handleClickDeleteEditorDoc}
+                style={{ width: "100%" }}
+              />
+              <CustomBtn
+                btnName="Cancel"
+                onClick={handleCancelDelete}
+                style={{ width: "100%" }}
+              />
+            </div>
+          </CustomModal>
+        ) : null}
+
+        {shareDocs ? (
+          <CustomModal
+            closeModal={shareDocs}
+            setCloseModal={setShareDocs}
+            title="Share your documents"
+            iconImg={shareIcon}
+          >
+            <div className={style.shareBox}>
+              <div className={style.userList}>
+                <CustomInput type="checkbox" />
+                <span>hello world</span>
+              </div>
+            </div>
+            <div className={style.deleteBtnBox}>
+              <CustomBtn
+                btnName="Share"
+                onClick={handleClickDeleteEditorDoc}
+                style={{ width: "100%" }}
+              />
+              <CustomBtn
+                btnName="Cancel"
+                onClick={handleCancelDelete}
+                style={{ width: "100%" }}
+              />
+            </div>
+          </CustomModal>
+        ) : null}
+      </div>
     </>
   );
 };

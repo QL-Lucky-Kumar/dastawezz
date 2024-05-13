@@ -1,7 +1,8 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import Documents from "../pages/Documents";
 import Layout from "../layout";
-import Editor from "../pages/DocEditor";
+// import Editor from "../pages/DocEditor";
+import MyEditor from "../pages/DocEditor";
 
 const PrivateRoutes = () => {
   const AllPrivateRoutes = useRoutes([
@@ -19,7 +20,7 @@ const PrivateRoutes = () => {
         },
         {
           path: "edit-docs",
-          element: <Editor />,
+          element: <MyEditor />,
         },
         {
           path: "*",

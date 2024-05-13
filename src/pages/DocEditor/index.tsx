@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import style from "./editor.module.css";
 import "react-quill/dist/quill.snow.css";
 import backBtn from "../../assets/back-button.png";
 import mammoth from "mammoth";
+import { useNavigate } from "react-router-dom";
+import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebase";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { getDocumentValue } from "../../redux/slices/docValueSlice";
 
-const MyEditor = (props: any) => {
-  const { onChange, handleBackBtn, value, pickTitle, docTitle } = props;
+const MyEditor = () => {
   const [htmlContent, setHtmlContent] = useState("");
+  const [docTitle, setDocTitle] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const getDocId = useSelector((state: any) => {
+    return state?.docValueSlice?.documentEditorValue;
+  });
 
   const toolbarOptions = [
     [{ font: [] }],
@@ -27,6 +38,24 @@ const MyEditor = (props: any) => {
     toolbar: toolbarOptions,
   };
 
+  useEffect(() => {
+    const fetchDocumentData = async () => {
+      if (getDocId?.id) {
+        try {
+          const docSnap = await getDoc(doc(db, "localDocs", getDocId.id));
+          if (docSnap.exists()) {
+            const { htmlContent, docTitle } = docSnap.data();
+            setHtmlContent(htmlContent);
+            setDocTitle(docTitle);
+          }
+        } catch (error) {
+          console.error("Error fetching document:", error);
+        }
+      }
+    };
+    fetchDocumentData();
+  }, [getDocId]);
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -35,14 +64,41 @@ const MyEditor = (props: any) => {
       const arrayBuffer = e.target.result;
       const result = await mammoth.convertToHtml({ arrayBuffer });
       setHtmlContent(result.value);
-      onChange(result.value);
     };
     reader.readAsArrayBuffer(file);
   };
 
   const handleHtmlChange = (content: any) => {
     setHtmlContent(content);
-    onChange(content);
+  };
+
+  const handleBackBtn = () => {
+    navigate("/document-list");
+    dispatch(getDocumentValue(""));
+  };
+
+  const handleSaveEditorContent = async () => {
+    try {
+      if (getDocId?.id) {
+        const docRef = doc(db, "localDocs", getDocId.id);
+        await updateDoc(docRef, {
+          htmlContent,
+          docTitle,
+        });
+        toast.success("Update Successfully");
+      } else {
+        const docInst = collection(db, "localDocs");
+        await addDoc(docInst, { htmlContent, docTitle });
+        toast.success("Add Successfully");
+      }
+      navigate("/documents-list");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePickTitle = (e: any) => {
+    setDocTitle(e.target.value);
   };
 
   return (
@@ -60,20 +116,30 @@ const MyEditor = (props: any) => {
             placeholder="Untitled Document"
             className={style.titledDocument}
             value={docTitle}
-            onChange={pickTitle}
+            onChange={handlePickTitle}
           />
-          <input
-            type="file"
-            onChange={handleFileChange}
-            placeholder="File"
-            className={style.openFile}
-          />
+
+          <label htmlFor="inputTag" className={style.fileUploadBox}>
+            Open File
+            <input
+              type="file"
+              onChange={handleFileChange}
+              placeholder="File"
+              className={style.openFile}
+              id="inputTag"
+              disabled={getDocId ? true : false}
+            />
+          </label>
+
+          <p className={style.fileUploadBox} onClick={handleSaveEditorContent}>
+            Save File
+          </p>
         </div>
       </div>
       <ReactQuill
         modules={modules}
         theme="snow"
-        value={htmlContent || value}
+        value={htmlContent}
         onChange={handleHtmlChange}
         className={style.quill}
       />
