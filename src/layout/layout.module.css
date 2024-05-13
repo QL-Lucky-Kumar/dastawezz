@@ -1,53 +1,29 @@
 .layoutWrapper {
   width: 100%;
   height: 100dvh;
-  display: flex;
-  justify-content: space-between;
 }
 .sidebarBox {
   background-color: var(--white);
-  height: 100dvh;
   box-shadow: var(--shadow);
-  width: 200px;
+  width: 100%;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .layoutMainWrapper {
-  width: calc(100% - 150px);
   background-color: var(--gray);
-  padding: 1rem;
   overflow-y: auto;
+  height: 100%;
 }
 
-.menuSection ul {
-  list-style: none;
-}
-.menuSection ul a {
-  text-decoration: none;
-}
-.menuSection ul li {
-  /* color: var(--black); */
-  padding: 0.8rem;
-  cursor: pointer;
-  transition: all ease 0.5s;
-  font-size: 14px;
-}
-.menuSection ul li:hover {
-  background-color: var(--primaryColor);
-  color: var(--white);
-}
-.logoSevction {
-  padding: 0.8rem;
-}
 .logoSevction h1 {
   color: var(--black);
 }
 .logoutBox {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background-color: #cfcfcf;
-  width: 100%;
-  padding: 0.5rem;
   display: flex;
   justify-content: end;
   align-items: center;
@@ -58,8 +34,9 @@
 }
 .logoutBox .colorPicker {
   position: absolute;
-  bottom: 2rem;
-  left: 0rem;
+  bottom: -19rem;
+  right: 0rem;
+  z-index: 9;
 }
 .btnBox {
   display: flex;
