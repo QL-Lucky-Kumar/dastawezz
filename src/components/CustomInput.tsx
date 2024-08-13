@@ -2,14 +2,14 @@ import style from "./commonComponents.module.css";
 
 interface CustomInputValues {
   labelText?: string;
-  errorText?: any;
+  errorText?: string | null;
   type?: string;
-  onChange?: any;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  id?: any;
-  value?: any;
-  name?:string;
-  onBlur?:any;
+  id?: string;
+  value?: string;
+  name?: string;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const CustomInput = (props: CustomInputValues) => {

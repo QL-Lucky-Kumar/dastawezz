@@ -6,6 +6,7 @@ import CustomInput from "../../components/CustomInput";
 import { db, fileDB } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+// useID
 import { addDoc, collection } from "@firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
