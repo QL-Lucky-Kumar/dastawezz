@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
 import { app } from "../../firebase";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import backBtn from "../../assets/back-button.png"
+import backBtn from "../../assets/back-button.png";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -24,7 +24,6 @@ const auth = getAuth(app);
 
 const Register = () => {
   const navigate = useNavigate();
-
   const initialValues = {
     name: "",
     email: "",

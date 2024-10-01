@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import deleteIcon from "../../assets/delete_.png";
 import shareIcon from "../../assets/share.png";
 import CustomInput from "../../components/CustomInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getDocumentValue } from "../../redux/slices/docValueSlice";
 
 const Documents = () => {
@@ -27,6 +27,10 @@ const Documents = () => {
   const handleClickShareDocs = () => {
     setShareDocs(true);
   };
+
+  const getUser = useSelector((state: any) => {
+    return state?.loginSlice?.userId;
+  });
 
   const handleClickEdit = (item: any) => {
     const matchId = localDocList.find((data: any) => {
@@ -58,7 +62,11 @@ const Documents = () => {
         ...val.data(),
         id: val.id,
       }));
-      setLocalDocList(result);
+      const filterDocList = result?.filter((item: any) => {
+        return item?.getUserID === getUser;
+      });
+
+      setLocalDocList(filterDocList);
     } catch (error) {
       console.log(error);
     }
@@ -94,24 +102,28 @@ const Documents = () => {
               <br />
               Document
             </button>
-            {localDocList?.map((item: any) => {
-              return (
-                <DocumentCard
-                  docImage={dummyPic}
-                  key={item.id}
-                  title={
-                    item.docTitle
-                      ? item.docTitle?.length > 15
-                        ? item.docTitle?.slice(0, 15) + "..."
-                        : item.docTitle
-                      : "Untitled Document"
-                  }
-                  handleEditDocuments={() => handleClickEdit(item)}
-                  handleShareDocuments={handleClickShareDocs}
-                  handleDeleteDocuments={() => handleDeleteEditorDoc(item.id)}
-                />
-              );
-            })}
+            {localDocList?.length > 1
+              ? localDocList?.map((item: any) => {
+                  return (
+                    <DocumentCard
+                      docImage={dummyPic}
+                      key={item.id}
+                      title={
+                        item.docTitle
+                          ? item.docTitle?.length > 15
+                            ? item.docTitle?.slice(0, 15) + "..."
+                            : item.docTitle
+                          : "Untitled Document"
+                      }
+                      handleEditDocuments={() => handleClickEdit(item)}
+                      handleShareDocuments={handleClickShareDocs}
+                      handleDeleteDocuments={() =>
+                        handleDeleteEditorDoc(item.id)
+                      }
+                    />
+                  );
+                })
+              : "Data Not Available"}
           </div>
         </div>
 

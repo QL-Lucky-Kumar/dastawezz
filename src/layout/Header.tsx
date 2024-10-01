@@ -67,7 +67,7 @@ const Header = () => {
     <>
       <div className={style.sidebarBox}>
         <div className={style.logoSevction}>
-          <h1>Dastawezz</h1>
+          <a href="/home"><h1>Dastawezz</h1></a>
         </div>
         <div className={style.logoutBox}>
           <img

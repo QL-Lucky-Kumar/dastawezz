@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
   accessToken: string | null;
+  userId:string;
 }
 
 const initialState: AuthState = {
   accessToken: null,
+  userId:"",
 };
 
 const loginSlice: any = createSlice({
@@ -16,7 +18,10 @@ const loginSlice: any = createSlice({
     accessAdminTokken(state, action) {
       state.accessToken = action.payload;
     },
+    getUserIdForUniqueUser(state, action) {
+      state.userId = action.payload;
+    },
   },
 });
-export const { accessAdminTokken, logoutAction } = loginSlice.actions;
+export const { accessAdminTokken, logoutAction,getUserIdForUniqueUser} = loginSlice.actions;
 export default loginSlice.reducer;

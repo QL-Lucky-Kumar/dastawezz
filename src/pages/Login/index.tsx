@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
 import { useDispatch } from "react-redux";
-import { accessAdminTokken } from "../../redux/slices/loginSlice";
+import { accessAdminTokken, getUserIdForUniqueUser } from "../../redux/slices/loginSlice";
 import { toast } from "react-toastify";
 
 const auth = getAuth(app);
@@ -39,6 +39,7 @@ const Login = () => {
       );
       if (value?.user && value?.user?.accessToken) {
         dispatch(accessAdminTokken(value?.user?.accessToken));
+        dispatch(getUserIdForUniqueUser(value?.user?.uid))
         navigate("/admin/dashboard");
         toast.success("Successfully Login");
       }

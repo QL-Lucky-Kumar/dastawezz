@@ -20,8 +20,16 @@ const MyEditor = () => {
     return state?.docValueSlice?.documentEditorValue;
   });
 
+  const getUserID = useSelector((state: any) => {
+    return state?.loginSlice?.userId;
+  });
+
   const toolbarOptions = [
-    [{ font: [] }],
+    [
+      {
+        font: ["sans-serif", "serif", "monospace", "roboto", "times-new-roman"],
+      },
+    ],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
     [{ size: ["small", true, "large", "huge"] }],
     ["link", "image"],
@@ -84,11 +92,12 @@ const MyEditor = () => {
         await updateDoc(docRef, {
           htmlContent,
           docTitle,
+          getUserID
         });
         toast.success("Update Successfully");
       } else {
         const docInst = collection(db, "localDocs");
-        await addDoc(docInst, { htmlContent, docTitle });
+        await addDoc(docInst, { htmlContent, docTitle, getUserID });
         toast.success("Add Successfully");
       }
       navigate("/documents-list");
