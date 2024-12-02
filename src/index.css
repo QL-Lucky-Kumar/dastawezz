@@ -25,6 +25,7 @@ body {
   --toastify-icon-color-success: var(--toastify-color-success);
   --toastify-text-color-success: #333;
   --toastify-text-color-light:#fff;
+  --darkGray:rgb(125, 125, 125);
 }
 .ubuntu-light {
   font-family: "Ubuntu", sans-serif;

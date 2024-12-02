@@ -72,21 +72,11 @@ const UploadDocuments = () => {
 
   return (
     <>
-      {/* <div className={style.uploadBox}>
-        <div className={style.uploadtypography_1}>
-          <h1>Publish to the Dastawezz</h1>
-          <p style={{ color: "#000" }}>
-            Presentations, research papers, legal documents, and more
-          </p>
-        </div>
-        <div className={style.uploadBtnBox}> */}
-          <CustomBtn
-            btnName="Upload"
-            onClick={handleOpenModal}
-            style={{ width: "100%" }}
-          />
-        {/* </div>
-      </div> */}
+      <CustomBtn
+        btnName="Upload"
+        onClick={handleOpenModal}
+        style={{ width: "100%" }}
+      />
       {closeModal ? (
         <CustomModal
           closeModal={closeModal}
@@ -117,7 +107,9 @@ const UploadDocuments = () => {
                   name="document"
                   onChange={(e: any) => handleUploadFile(e)}
                   errorText={
-                    docFile == "" && errorMsg ? "Only Accept txt or docx files" : null
+                    docFile == "" && errorMsg
+                      ? "Only Accept txt or docx files"
+                      : null
                   }
                 />
               </div>

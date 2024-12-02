@@ -1,4 +1,4 @@
-.wrapperAllBox{
+.wrapperAllBox {
   padding: 1rem;
 }
 .uploadBox {
@@ -31,7 +31,7 @@
   border: 1px solid #ccc;
 }
 
-.mainDocumentCardBox .docImage{
+.mainDocumentCardBox .docImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -76,9 +76,9 @@
 .typography_1 {
   padding: 0.5rem;
 }
-.title{
+.title {
   font-size: 0.875rem;
-  color:#333;
+  color: #333;
   text-transform: capitalize;
   font-family: var(--font);
   font-weight: 400;
@@ -128,7 +128,7 @@
   display: flex;
   gap: 1rem;
 }
-.mainDocumentListingBox{
+.mainDocumentListingBox {
   display: flex;
   flex-direction: column;
 }
@@ -144,13 +144,13 @@
   overflow: auto;
   max-height: 6rem;
 }
-.shareBox::-webkit-scrollbar{
-  width:1px;
+.shareBox::-webkit-scrollbar {
+  width: 1px;
   /* background-color: var(--primaryColor); */
 }
 .userList {
   display: flex;
-  align-items:start;
+  align-items: start;
   padding: 0.5rem;
 }
 .userList input[type="checkbox"] {
@@ -161,9 +161,32 @@
   accent-color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
 }
-.otherTextBtnBox{
+.otherTextBtnBox {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+.emptyCaseBox {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.emptyCaseBox h1 {
+  font-size: 3.5rem;
+  color: var(--darkGray);
+  margin-bottom: 2rem;
+}
+
+.backHomeBtn {
+  width: 12rem;
+  height: 4rem;
+  margin: 0 auto;
+}
+.backHomeBtn button {
+  height: 100%;
 }
