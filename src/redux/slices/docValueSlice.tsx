@@ -1,18 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthState {
+type DocState  ={
   documentEditorValue: string;
 }
 
-const initialState: AuthState = {
+const initialState: DocState = {
     documentEditorValue: "",
 };
 
-const docValueSlice: any = createSlice({
+ const docValueSlice = createSlice({
   name: "documentEditor",
   initialState,
   reducers: {
-    getDocumentValue(state, action) {
+    getDocumentValue(state, action: PayloadAction<string>) {
       state.documentEditorValue = action.payload;
     },
   },

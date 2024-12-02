@@ -10,14 +10,15 @@ import { db } from "../../firebase";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getDocumentValue } from "../../redux/slices/docValueSlice";
+import { RootState } from "../../redux/store";
 
 const MyEditor = () => {
   const [htmlContent, setHtmlContent] = useState("");
   const [docTitle, setDocTitle] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getDocId = useSelector((state: any) => {
-    return state?.docValueSlice?.documentEditorValue;
+  const getDocId = useSelector((state: RootState) => {
+    return state.documentEditor.documentEditorValue;
   });
 
   const getUserID = useSelector((state: any) => {

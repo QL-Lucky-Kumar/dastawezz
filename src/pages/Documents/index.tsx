@@ -16,6 +16,7 @@ import CustomInput from "../../components/CustomInput";
 import { useDispatch, useSelector } from "react-redux";
 import { getDocumentValue } from "../../redux/slices/docValueSlice";
 import EmptyCase from "./EmptyCase";
+import { RootState } from "../../redux/store";
 
 const Documents = () => {
   const [localDocList, setLocalDocList] = useState<any>();
@@ -30,8 +31,8 @@ const Documents = () => {
     console.log(nextPageToken);
   };
 
-  const getUser = useSelector((state: any) => {
-    return state?.loginSlice?.userId;
+  const getUser = useSelector((state: RootState) => {
+    return state.loginToken.userId;
   });
 
   const handleClickEdit = (item: any) => {
