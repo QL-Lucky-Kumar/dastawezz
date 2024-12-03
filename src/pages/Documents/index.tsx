@@ -40,11 +40,11 @@ const Documents = () => {
       return data.id === item.id;
     });
     dispatch(getDocumentValue(matchId));
-    navigate("/edit-docs");
+    navigate(`/doc/${matchId.id}`);
   };
 
   const handleOpenDocEditor = () => {
-    navigate("/edit-docs");
+    navigate("/doc/new");
     dispatch(getDocumentValue(""));
   };
 
