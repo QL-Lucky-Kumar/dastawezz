@@ -1,36 +1,46 @@
-import { useState, useEffect, useMemo, useRef, useCallback, ChangeEvent } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import ReactQuill from "react-quill";
 import style from "./editor.module.css";
-import "react-quill/dist/quill.snow.css";
 import backBtn from "../../assets/back-button.png";
 import mammoth from "mammoth";
 import { useNavigate, useParams } from "react-router-dom";
-import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
-import { db } from "../../firebase";
+import { arrayUnion } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { getDocumentValue } from "../../redux/slices/docValueSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import QuillResizeImage from 'quill-resize-image';
+import QuillResizeImage from "quill-resize-image";
 import Quill from "quill";
-import { getDocById } from "../../common/utils";
-
+import { deleteDocById, getDocById, updateDocById } from "../../common/utils";
+import {
+  CHANGE_LOG,
+  DB_COLLECTION,
+  LOCAL_DOCS_TYPE,
+} from "../../common/common.types";
 
 // console.log(reactQuillRef?.current?.getEditor().getText()) GET CONTENT FROM QUILL DIRECTLY
 
 const MyEditor = () => {
-
   const reactQuillRef = useRef<ReactQuill | null>(null);
-  const [htmlContent, setHtmlContent] = useState<string>("");
+  const [docContent, setDocContent] = useState<string>("");
   const [docTitle, setDocTitle] = useState<string>("");
+  const [docCreatedBy, setDocCreatedBy] = useState<string>("");
+  const [fetchingDoc, setFetchingDoc] = useState<boolean>(false);
+  const [savingDoc, setSavingDoc] = useState<boolean>(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {id} = useParams()
-  const getDocId = useSelector((state: RootState) => {
+  const { id } = useParams();
+
+  const globalDocID = useSelector((state: RootState) => {
     return state.documentEditor.documentEditorValue;
   });
 
-  const ownerId = useSelector((state: RootState) => {
+  const userId = useSelector((state: RootState) => {
     return state.loginToken.userId;
   });
 
@@ -65,27 +75,80 @@ const MyEditor = () => {
     return { toolbar: toolbarOptions };
   }, [toolbarOptions]);
 
-  useEffect(() => {
-    if(reactQuillRef.current){
-      const quill = reactQuillRef.current.getEditor() as unknown as Quill
-     QuillResizeImage(quill) 
+  const fetchDocData = useCallback(async () => {
 
+    if (id === "new" && !globalDocID) return;
+    setFetchingDoc(true);
+    try {
+      const {
+        htmlContent,
+        docTitle: title,
+        createdBy,
+      } = await getDocById<LOCAL_DOCS_TYPE>(
+        DB_COLLECTION.localDocs,
+        id || globalDocID
+      );
+      setDocContent(htmlContent);
+      setDocTitle(title);
+      setDocCreatedBy(createdBy);
+    } catch (error) {
+      toast.error("Unable to fetch Doc details");
+      console.error(error);
+      navigate(-1);
+    } finally {
+      setFetchingDoc(false);
     }
-    // const fetchDocumentData = async () => {
-    //   if (getDocId?.id) {
-    //     const { htmlContent, docTitle }= await getDocById(id)
-    //     setHtmlContent(htmlContent);
-    //         setDocTitle(docTitle);
-    //   }
-    // };
+  }, [id, globalDocID]);
 
-    getDocById(id).then((res)=>{
-      const { htmlContent, docTitle } = res
-      setHtmlContent(htmlContent);
-     setDocTitle(docTitle);
-    }).catch((err)=>alert(err))
+  const handleDocDelete = async () => {
+    try {
+      if (
+        !reactQuillRef?.current?.getEditor().getText().trim().length &&
+        !docTitle.trim().length
+      ) {
+        console.log("called")
+        await deleteDocById(DB_COLLECTION.localDocs, id || globalDocID);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const handleBackBtn = useCallback(async () => {
     
-  }, []);
+   await handleDocDelete();
+    navigate("/documents-list");
+  }, [handleDocDelete]);
+  // }, [id,globalDocID,docTitle,reactQuillRef?.current?.getEditor().getText().trim()]);
+
+
+
+
+  useEffect(() => {
+    if (reactQuillRef.current) {
+      const quill = reactQuillRef.current.getEditor() as unknown as Quill;
+      QuillResizeImage(quill);
+    }
+    fetchDocData();
+    window.addEventListener('beforeunload',(e)=>{
+      e.preventDefault()
+      return (e.returnValue="")
+    },{capture:true})
+
+    return () => {
+    // console.log(
+    //     window.location.pathname.split("/")[
+    //       window.location.pathname.split("/").length - 1
+    //     ],id
+    //   )
+    window.removeEventListener('beforeunload',(e)=>{
+      e.preventDefault()
+      return (e.returnValue="")
+    },{capture:true})
+    };
+  }, [fetchDocData]);
+
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -94,44 +157,51 @@ const MyEditor = () => {
     reader.onload = async (e: any) => {
       const arrayBuffer = e.target.result;
       const result = await mammoth.convertToHtml({ arrayBuffer });
-      setHtmlContent(result.value);
+      setDocContent(result.value);
     };
     reader.readAsArrayBuffer(file);
   };
 
   const handleHtmlChange = (content: any) => {
-    setHtmlContent(content);
+    setDocContent(content);
   };
 
-  const handleBackBtn = useCallback(() => {
-    navigate("/document-list");
-    dispatch(getDocumentValue(""));
-  },[]);
-
-  const handleSaveEditorContent = async () => {
+  const saveContent = useCallback(async () => {
+    if (
+      !reactQuillRef?.current?.getEditor().getText().trim().length &&
+      !docTitle.trim().length
+    )
+      return;
+    if (!id) return toast.error("Could not detect ID");
+    setSavingDoc(true);
     try {
-      if (getDocId?.id) {
-        const docRef = doc(db, "localDocs", getDocId.id);
-        await updateDoc(docRef, {
-          htmlContent,
-          docTitle,
-          getUserID: ownerId,
-        });
-        toast.success("Update Successfully");
-      } else {
-        const docInst = collection(db, "localDocs");
-        await addDoc(docInst, { htmlContent, docTitle, getUserID: ownerId });
-        toast.success("Add Successfully");
-      }
-      navigate("/documents-list");
+      const newChangeLog: CHANGE_LOG = {
+        userId: userId,
+        time: new Date().toLocaleString(),
+      };
+      await updateDocById(DB_COLLECTION.localDocs, id, {
+        htmlContent: docContent,
+        docTitle,
+        changeLogs: arrayUnion(newChangeLog),
+      });
     } catch (error) {
-      console.log(error);
+      toast.error("Unable to update");
+      console.error(error);
+    } finally {
+      setSavingDoc(false);
     }
-  };
+  }, [
+    id,
+    docTitle,
+    docContent,
+    userId,
+    docTitle,
+    reactQuillRef?.current?.getEditor().getText().trim(),
+  ]);
 
   const handlePickTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setDocTitle(e.target?.value);
-  },[]);
+  }, []);
 
   return (
     <>
@@ -159,11 +229,11 @@ const MyEditor = () => {
               placeholder="File"
               className={style.openFile}
               id="inputTag"
-              disabled={getDocId ? true : false}
+              disabled={globalDocID ? true : false}
             />
           </label>
 
-          <p className={style.fileUploadBox} onClick={handleSaveEditorContent}>
+          <p className={style.fileUploadBox} onClick={saveContent}>
             Save File
           </p>
         </div>
@@ -172,7 +242,7 @@ const MyEditor = () => {
         ref={reactQuillRef}
         modules={modules}
         theme="snow"
-        value={htmlContent}
+        value={docContent}
         onChange={handleHtmlChange}
         className={style.quill}
       />

@@ -12,10 +12,10 @@ const initialState: DocState = {
   name: "documentEditor",
   initialState,
   reducers: {
-    getDocumentValue(state, action: PayloadAction<string>) {
+    setGlobalDocId(state, action: PayloadAction<string>) {
       state.documentEditorValue = action.payload;
     },
   },
 });
-export const { getDocumentValue } = docValueSlice.actions;
+export const { setGlobalDocId } = docValueSlice.actions;
 export default docValueSlice.reducer;

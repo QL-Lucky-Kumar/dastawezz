@@ -4,7 +4,7 @@ import style from "./documents.module.css";
 import plus from "../../assets/plus.png";
 import { collection, getDocs } from "@firebase/firestore";
 import { db } from "../../firebase";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dummyPic from "../../assets/dummyPic.png";
 import CustomModal from "../../components/CustomModal";
 import CustomBtn from "../../components/CustomBtn";
@@ -14,9 +14,11 @@ import deleteIcon from "../../assets/delete_.png";
 import shareIcon from "../../assets/share.png";
 import CustomInput from "../../components/CustomInput";
 import { useDispatch, useSelector } from "react-redux";
-import { getDocumentValue } from "../../redux/slices/docValueSlice";
+import { setGlobalDocId } from "../../redux/slices/docValueSlice";
 import EmptyCase from "./EmptyCase";
 import { RootState } from "../../redux/store";
+import { addNewDoc } from "../../common/utils";
+import { DB_COLLECTION } from "../../common/common.types";
 
 const Documents = () => {
   const [localDocList, setLocalDocList] = useState<any>();
@@ -31,7 +33,7 @@ const Documents = () => {
     console.log(nextPageToken);
   };
 
-  const getUser = useSelector((state: RootState) => {
+  const userId = useSelector((state: RootState) => {
     return state.loginToken.userId;
   });
 
@@ -39,14 +41,23 @@ const Documents = () => {
     const matchId = localDocList.find((data: any) => {
       return data.id === item.id;
     });
-    dispatch(getDocumentValue(matchId));
+    dispatch(setGlobalDocId(matchId.id));
     navigate(`/doc/${matchId.id}`);
   };
 
-  const handleOpenDocEditor = () => {
-    navigate("/doc/new");
-    dispatch(getDocumentValue(""));
-  };
+  const handleOpenDocEditor = useCallback(async () => {
+    try {
+      const newDoc = await addNewDoc(DB_COLLECTION.localDocs, {
+        htmlContent: "",
+        docTitle: "",
+        createdBy: userId,
+      });
+      navigate(`/doc/${newDoc.id}`);
+    } catch (error) {
+      toast.error("Unable to fetch Doc details");
+      console.error(error);
+    }
+  }, []);
 
   const handleCancelDelete = () => {
     setShowEditModal(false);
@@ -66,7 +77,7 @@ const Documents = () => {
         id: val.id,
       }));
       const filterDocList = result?.filter((item: any) => {
-        return item?.getUserID === getUser;
+        return item?.createdBy === userId;
       });
 
       setLocalDocList(filterDocList);
