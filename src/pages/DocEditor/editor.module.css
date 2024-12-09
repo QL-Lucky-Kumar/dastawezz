@@ -18,6 +18,18 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mainText{
+  font-weight: bold;
+}
+.docEditorNameAndUsersContainer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
 .titledDocument::placeholder {
   color: var(--black);
@@ -46,6 +58,21 @@
   font-weight: 500;
   opacity: 0.7;
   cursor: pointer;
+}
+
+.loaderImg{
+  width: 17px;
+  animation: loaderImgSPin 1s linear infinite; 
+
+}
+
+@keyframes loaderImgSPin {
+  0% {
+    transform: rotate(0deg); 
+  }
+  100% {
+    transform: rotate(360deg);  
+  }
 }
 
 .wrapperAllBox {
