@@ -4,15 +4,16 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: `${import.meta.env.VITE_FIREBASE_API_KEY}`,
-  authDomain: "dastawezz-757ce.firebaseapp.com",
-  projectId: "dastawezz-757ce",
-  storageBucket: "dastawezz-757ce.appspot.com",
-  messagingSenderId: "231378213467",
-  appId: "1:231378213467:web:f638850f115033611f3d7e",
-  measurementId: "G-QFFZ3M9E32",
+  authDomain: `${import.meta.env.VITE_FIREBASE_AUTH_DOMAIN}`,
+  projectId: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}`,
+  storageBucket: `${import.meta.env.VITE_FIREBASE_STORAGE_BUCKET}`,
+  messagingSenderId: `${import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID}`,
+  appId: `${import.meta.env.VITE_FIREBASE_APP_ID}`,
+  measurementId: `${import.meta.env.VITE_FIREBASE_MEASUREMENT_ID}`,
 };
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const fileDB = getStorage(app);
 export const userRef = collection(db, "users");
+

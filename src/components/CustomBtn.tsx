@@ -2,16 +2,16 @@ import styles from "./commonComponents.module.css";
 
 interface CustomBtnValue {
   btnName?: string;
-  onClick?: any;
+  onClick?: () => void;
   className?: string;
-  type?: any;
+  type?: "submit" | "reset" | "button" | undefined;
   role?: string;
-  disabled?: any;
-  style?: any;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  loading?:boolean
 }
-
 const CustomBtn = (props: CustomBtnValue) => {
-  const { btnName, onClick, type, role, disabled, style } = props;
+  const { btnName, onClick, type, role, disabled, style ,loading} = props;
   return (
     <button
       onClick={onClick}
@@ -21,7 +21,7 @@ const CustomBtn = (props: CustomBtnValue) => {
       disabled={disabled}
       style={style}
     >
-      {btnName}
+      {loading ? <div className={styles.btnLoader}/>: <span>{btnName}</span>}
     </button>
   );
 };

@@ -1,5 +1,5 @@
 {
-  "name": "reactadvancepractice",
+  "name": "dastawezz",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,6 +16,8 @@
     "formik": "^2.4.5",
     "jodit-react": "^4.1.2",
     "mammoth": "^1.7.2",
+    "quill": "^2.0.3",
+    "quill-resize-image": "^1.0.5",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",

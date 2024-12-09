@@ -1,21 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthState {
+
+type DocState  ={
   documentEditorValue: string;
 }
 
-const initialState: AuthState = {
+const initialState: DocState = {
     documentEditorValue: "",
 };
 
-const docValueSlice: any = createSlice({
+ const docValueSlice = createSlice({
   name: "documentEditor",
   initialState,
   reducers: {
-    getDocumentValue(state, action) {
+    setGlobalDocId(state, action: PayloadAction<string>) {
       state.documentEditorValue = action.payload;
-    },
+    }
   },
 });
-export const { getDocumentValue } = docValueSlice.actions;
+
+
+
+export const { setGlobalDocId } = docValueSlice.actions;
 export default docValueSlice.reducer;

@@ -19,7 +19,7 @@ const PrivateRoutes = () => {
           element: <Navigate replace to="documents-list" />,
         },
         {
-          path: "edit-docs",
+          path: "doc/:id",
           element: <MyEditor />,
         },
         {

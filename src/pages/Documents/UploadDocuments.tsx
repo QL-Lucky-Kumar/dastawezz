@@ -6,6 +6,7 @@ import CustomInput from "../../components/CustomInput";
 import { db, fileDB } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+// useID
 import { addDoc, collection } from "@firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
@@ -65,27 +66,17 @@ const UploadDocuments = () => {
       navigate("/documents-list");
       toast.success("Added Successfully");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
     <>
-      {/* <div className={style.uploadBox}>
-        <div className={style.uploadtypography_1}>
-          <h1>Publish to the Dastawezz</h1>
-          <p style={{ color: "#000" }}>
-            Presentations, research papers, legal documents, and more
-          </p>
-        </div>
-        <div className={style.uploadBtnBox}> */}
-          <CustomBtn
-            btnName="Upload"
-            onClick={handleOpenModal}
-            style={{ width: "100%" }}
-          />
-        {/* </div>
-      </div> */}
+      <CustomBtn
+        btnName="Upload"
+        onClick={handleOpenModal}
+        style={{ width: "100%" }}
+      />
       {closeModal ? (
         <CustomModal
           closeModal={closeModal}
@@ -116,7 +107,9 @@ const UploadDocuments = () => {
                   name="document"
                   onChange={(e: any) => handleUploadFile(e)}
                   errorText={
-                    docFile == "" && errorMsg ? "Only Accept txt or docx files" : null
+                    docFile == "" && errorMsg
+                      ? "Only Accept txt or docx files"
+                      : null
                   }
                 />
               </div>

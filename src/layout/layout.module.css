@@ -23,6 +23,9 @@
 .logoSevction h1 {
   color: var(--black);
 }
+.logoSevction a{
+  text-decoration: none;
+}
 .logoutBox {
   display: flex;
   justify-content: end;

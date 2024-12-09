@@ -12,6 +12,7 @@ import CustomBtn from "../components/CustomBtn";
 import { getColorCode } from "../redux/slices/themeSlice";
 import { toast } from "react-toastify";
 import logoutIcon from "../assets/power.png"
+import { RootState } from "../redux/store";
 
 const Header = () => {
   const [showColor, setShowColor] = useState<boolean>(false);
@@ -21,9 +22,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const [closeModal, setCloseModal] = useState<boolean>(false);
 
-  const themeColor = useSelector((state: any) => {
-    return state?.themeSlice?.colorCode;
+  const themeColor = useSelector((state: RootState) => {
+    return state.themeColor.colorCode;
   });
+
 
 
   const handleShowColorPicker = () => {
@@ -67,7 +69,7 @@ const Header = () => {
     <>
       <div className={style.sidebarBox}>
         <div className={style.logoSevction}>
-          <h1>Dastawezz</h1>
+          <a href="/home"><h1>Dastawezz</h1></a>
         </div>
         <div className={style.logoutBox}>
           <img

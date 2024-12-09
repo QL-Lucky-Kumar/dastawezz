@@ -1,18 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthState {
+type ThemeColorState = {
   colorCode: string;
 }
 
-const initialState: AuthState = {
+const initialState: ThemeColorState = {
   colorCode: "",
 };
 
-const themeSlice: any = createSlice({
+const themeSlice = createSlice({
   name: "themeColor",
   initialState,
   reducers: {
-    getColorCode(state, action) {
+    getColorCode(state, action : PayloadAction<string>) {
       state.colorCode = action.payload;
     },
   },
