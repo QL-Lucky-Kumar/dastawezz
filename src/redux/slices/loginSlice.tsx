@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthState {
+ interface AuthState {
   accessToken: string | null;
   userId:string;
 }
@@ -10,18 +10,19 @@ const initialState: AuthState = {
   userId:"",
 };
 
-const loginSlice: any = createSlice({
-  name: "loginTokken",
+ const loginSlice = createSlice({
+  name: "loginToken",
   initialState,
   reducers: {
     logoutAction: (): AuthState => initialState,
-    accessAdminTokken(state, action) {
+    accessAdminToken(state, action: PayloadAction<string>) {
       state.accessToken = action.payload;
     },
-    getUserIdForUniqueUser(state, action) {
+    getUserIdForUniqueUser(state, action: PayloadAction<string>) {
       state.userId = action.payload;
     },
   },
 });
-export const { accessAdminTokken, logoutAction,getUserIdForUniqueUser} = loginSlice.actions;
+
+export const { accessAdminToken, logoutAction,getUserIdForUniqueUser} = loginSlice.actions;
 export default loginSlice.reducer;

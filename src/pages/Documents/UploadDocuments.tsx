@@ -66,7 +66,7 @@ const UploadDocuments = () => {
       navigate("/documents-list");
       toast.success("Added Successfully");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

@@ -1,14 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {  combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import rootReducer from "../rootReducer/rootReducer";
+import loginSlice from "../slices/loginSlice"
+import docValueSlice from "../slices/docValueSlice"
+import themeSlice from "../slices/themeSlice"
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["loginSlice", "themeSlice", "docValueSlice"],
 };
+
+const rootReducer = combineReducers({
+  loginToken:loginSlice,
+  documentEditor:docValueSlice,
+  themeColor:themeSlice
+});
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -19,5 +27,8 @@ const store = configureStore({
 });
 
 const persistor = persistStore(store);
+
+
 export { store, persistor };
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch

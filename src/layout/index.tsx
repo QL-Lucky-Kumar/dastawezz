@@ -2,13 +2,14 @@ import { Outlet } from "react-router-dom";
 import style from "./layout.module.css";
 import { Suspense } from "react";
 import Header from "./Header";
+import Loader from "../components/Loader";
 
 const CustomLayout = () => {
   return (
     <div className={style.layoutWrapper}>
       <Header />
       <div className={style.layoutMainWrapper}>
-        <Suspense fallback="...Loading">
+        <Suspense fallback={<Loader/>}>
           <Outlet />
         </Suspense>
       </div>

@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
 import { useDispatch } from "react-redux";
-import { accessAdminTokken, getUserIdForUniqueUser } from "../../redux/slices/loginSlice";
+import { accessAdminToken, getUserIdForUniqueUser } from "../../redux/slices/loginSlice";
 import { toast } from "react-toastify";
 
 const auth = getAuth(app);
@@ -32,13 +32,13 @@ const Login = () => {
 
   const handleLogin = async (values: any, { setSubmitting }: any) => {
     try {
-      const value: any = await signInWithEmailAndPassword(
+      const value = await signInWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
       if (value?.user && value?.user?.accessToken) {
-        dispatch(accessAdminTokken(value?.user?.accessToken));
+        dispatch(accessAdminToken(value?.user?.accessToken));
         dispatch(getUserIdForUniqueUser(value?.user?.uid))
         navigate("/admin/dashboard");
         toast.success("Successfully Login");

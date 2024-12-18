@@ -2,50 +2,88 @@ import { useNavigate } from "react-router-dom";
 import DocumentCard from "./DocumentCard";
 import style from "./documents.module.css";
 import plus from "../../assets/plus.png";
-import { collection, getDocs } from "@firebase/firestore";
-import { db } from "../../firebase";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dummyPic from "../../assets/dummyPic.png";
 import CustomModal from "../../components/CustomModal";
 import CustomBtn from "../../components/CustomBtn";
-import { deleteDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import deleteIcon from "../../assets/delete_.png";
 import shareIcon from "../../assets/share.png";
 import CustomInput from "../../components/CustomInput";
 import { useDispatch, useSelector } from "react-redux";
-import { getDocumentValue } from "../../redux/slices/docValueSlice";
+import { setGlobalDocId } from "../../redux/slices/docValueSlice";
 import EmptyCase from "./EmptyCase";
+import { RootState } from "../../redux/store";
+import {
+  getFilteredLocalDocData,
+  handleDocOperations,
+} from "../../common/utils";
+import {
+  AFFECTED_DOC_TYPE,
+  DB_COLLECTION,
+  OPERATION_TYPE,
+  QUERY_DOC_TYPE,
+} from "../../common/common.types";
+import Loader from "../../components/Loader";
 
 const Documents = () => {
   const [localDocList, setLocalDocList] = useState<any>();
   const [editorDocId, setEditorDocId] = useState<string>("");
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [creatingNewDoc, setCreatingNewDoc] = useState<boolean>(false);
+  const [fetchingDocData, setFetchingDocData] = useState<boolean>(false);
   const [shareDocs, setShareDocs] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleClickShareDocs = async (nextPageToken: any) => {
+  const handleClickShareDocs = () => {
     setShareDocs(true);
-    console.log(nextPageToken);
   };
 
-  const getUser = useSelector((state: any) => {
-    return state?.loginSlice?.userId;
+  const userId = useSelector((state: RootState) => {
+    return state.loginToken.userId;
   });
 
   const handleClickEdit = (item: any) => {
     const matchId = localDocList.find((data: any) => {
       return data.id === item.id;
     });
-    dispatch(getDocumentValue(matchId));
-    navigate("/edit-docs");
+    dispatch(setGlobalDocId(matchId.id));
+    navigate(`/doc/${matchId.id}?doctype=${QUERY_DOC_TYPE.edit}`);
   };
 
-  const handleOpenDocEditor = () => {
-    navigate("/edit-docs");
-    dispatch(getDocumentValue(""));
-  };
+  const handleOpenDocEditor = useCallback(async () => {
+    setCreatingNewDoc(true)
+    try {
+      const affectedDocs:AFFECTED_DOC_TYPE[] = [
+        {
+          docId: userId,
+          operationsType: OPERATION_TYPE.add,
+          docCollection: DB_COLLECTION.users,
+        },
+      ];
+      const newDocId = await handleDocOperations(
+        affectedDocs,
+        OPERATION_TYPE.add,
+        DB_COLLECTION.localDocs,
+        undefined,
+        {
+          htmlContent: "",
+          docTitle: "",
+          createdBy: userId,
+        }
+      );
+
+      dispatch(setGlobalDocId(newDocId));
+      navigate(`/doc/${newDocId}?doctype=${QUERY_DOC_TYPE.new}`);
+    } catch (error) {
+      toast.error("Unable to fetch Doc details");
+      console.error(error);
+    } finally {
+      setCreatingNewDoc(false)
+
+    }
+  }, [userId]);
 
   const handleCancelDelete = () => {
     setShowEditModal(false);
@@ -56,41 +94,49 @@ const Documents = () => {
     setEditorDocId(id);
   };
 
-  const getLocalDocData = async () => {
+  const getDocData = useCallback(async () => {
+    setFetchingDocData(true);
     try {
-      const getLocalList = collection(db, "localDocs");
-      const resp = await getDocs(getLocalList);
-      const result = resp.docs.map((val) => ({
-        ...val.data(),
-        id: val.id,
-      }));
-      const filterDocList = result?.filter((item: any) => {
-        return item?.getUserID === getUser;
-      });
-
-      setLocalDocList(filterDocList);
+      const docs = await getFilteredLocalDocData(userId);
+      setLocalDocList(docs);
     } catch (error) {
-      console.log(error);
+      toast.error("Unable to fetch Docs");
+      console.error(error);
+    } finally {
+      setFetchingDocData(false);
     }
-  };
+  }, [userId]);
 
-  const handleClickDeleteEditorDoc = async () => {
+  const handleClickDeleteEditorDoc = useCallback(async () => {
     try {
-      await deleteDoc(doc(db, "localDocs", editorDocId));
-      getLocalDocData();
+      const affectedDocs:AFFECTED_DOC_TYPE[] = [
+        {
+          docId: userId,
+          operationsType: OPERATION_TYPE.delete,
+          docCollection: DB_COLLECTION.users,
+        },
+      ];
+      await handleDocOperations(
+        affectedDocs,
+        OPERATION_TYPE.delete,
+        DB_COLLECTION.localDocs,
+        editorDocId
+      );
+      getDocData();
       setShowEditModal(false);
-      toast.success("Delete Successfully");
+      toast.success("Deleted Successfully");
     } catch (error) {
       console.error("Error deleting document:", error);
     }
-  };
+  }, [editorDocId,userId]);
 
   useEffect(() => {
-    getLocalDocData();
-  }, []);
+    getDocData();
+  }, [getDocData]);
 
   return (
     <>
+    {creatingNewDoc && <Loader/>}
       {localDocList?.length >= 1 ? (
         <div className={style.wrapperAllBox}>
           <div className={style.mainDocumentListingBox}>
@@ -177,15 +223,21 @@ const Documents = () => {
           ) : null}
         </div>
       ) : (
-        <div className={style.emptyCaseBox}>
-          <EmptyCase />
-          <div className={style.backHomeBtn}>
-            <CustomBtn
-              btnName="Create Your Document"
-              onClick={handleOpenDocEditor}
-            />
-          </div>
-        </div>
+        <>
+          {fetchingDocData ? (
+            <Loader />
+          ) : (
+            <div className={style.emptyCaseBox}>
+              <EmptyCase />
+              <div className={style.backHomeBtn}>
+                <CustomBtn
+                  btnName="Create Your Document"
+                  onClick={handleOpenDocEditor}
+                />
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   );
