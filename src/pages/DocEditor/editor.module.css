@@ -62,16 +62,16 @@
 
 .loaderImg{
   width: 17px;
-  animation: loaderImgSPin 1s linear infinite; 
+  animation: loaderImgSPin 1s linear infinite;
 
 }
 
 @keyframes loaderImgSPin {
   0% {
-    transform: rotate(0deg); 
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);  
+    transform: rotate(360deg);
   }
 }
 
@@ -136,6 +136,7 @@
 .mainDocumentCardBox:hover .overlayMaskDocument {
   transform: translateY(0%);
 }
+
 .iconBox {
   display: flex;
   justify-content: end;
